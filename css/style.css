@@ -1,0 +1,10 @@
+.navbar{
+    background-color: aquamarine;
+}
+.inicio{
+    background-image: url("http://jogazera.com.br/wp-content/uploads/2017/09/monster-hunter-world-01.jpg");
+    background-size: cover
+}
+#conteudoInicio{
+    padding-top: 300px
+}
