@@ -1,0 +1,94 @@
+import pygame
+from random import randint
+
+white = (255,255,255)
+black = (0,0,0)
+red = (255,0,0)
+green = (0,255,0)
+blue = (0,0,255)
+
+try:
+     pygame.init()
+except:
+     print("O modulo Pygame Não Foi Inicializado Com Sucesso")
+
+largura = 640
+altura = 480
+tamanho = 10
+
+
+relogio = pygame.time.Clock()
+fundo = pygame.display.set_mode((largura,altura))
+pygame.display.set_caption("Snake")
+
+def cobra(CobraXY):
+     for XY in CobraXY:
+          pygame.draw.rect(fundo, black,[XY[0],XY[1],tamanho,tamanho])
+     
+def apple(pos_x,pos_y):
+     pygame.draw.rect(fundo, red, [pos_x,pos_y,tamanho,tamanho])
+     
+
+def jogo():
+     pos_x = randint(0,(largura-tamanho)/10)*10
+     pos_y = randint(0,(altura-tamanho)/10)*10
+     apple_x = randint(0,(largura-tamanho)/10)*10
+     apple_y = randint(0,(altura-tamanho)/10)*10
+     velocidade_x = 0
+     velocidade_y = 0
+     sair = True
+     CobraXY = []
+     CobraComp = 1
+     while sair:
+          for event in pygame.event.get():
+               if event.type == pygame.QUIT:
+                    sair = False
+               if event.type == pygame.KEYDOWN:
+                    if event.key == pygame.K_LEFT and velocidade_x != tamanho:
+                         velocidade_y = 0
+                         velocidade_x =-tamanho
+                    if event.key == pygame.K_RIGHT and velocidade_x != -tamanho:
+                         velocidade_y = 0
+                         velocidade_x = tamanho
+                    if event.key == pygame.K_UP and velocidade_y != tamanho:
+                         velocidade_x = 0
+                         velocidade_y = -tamanho
+                    if event.key == pygame.K_DOWN and velocidade_y != -tamanho:
+                         velocidade_x = 0
+                         velocidade_y = tamanho
+                    
+          fundo.fill(white)
+          pos_x += velocidade_x
+          pos_y += velocidade_y
+
+          
+          CobraInicio = []
+          CobraInicio.append(pos_x)
+          CobraInicio.append(pos_y)
+          CobraXY.append(CobraInicio)
+          if len(CobraXY) > CobraComp:
+               del CobraXY[0]
+
+          cobra(CobraXY)
+          if pos_x == apple_x and pos_y == apple_y:
+               apple_x = randint(0,(largura-tamanho)/10)*10
+               apple_y = randint(0,(altura-tamanho)/10)*10
+               CobraComp += 1
+
+          
+          apple(apple_x,apple_y)
+          print(event)
+          pygame.display.update()
+          relogio.tick(15)
+          if pos_x > largura:
+               pos_x = 0
+          if pos_x < 0:
+               pos_x = largura - tamanho
+          if pos_y > altura:
+               pos_y = 0
+          if pos_y < 0:
+               pos_y = altura - tamanho
+
+jogo()
+pygame.quit()
+
